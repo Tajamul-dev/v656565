@@ -1,0 +1,18 @@
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+API key should be set when using the Gemini API.
+API key should be set when using the Gemini API.
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - `__dirname` (vite.config.ts:11:27). Use `import.meta.dirname` instead
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+6:19:57 PM [vite] (client) Re-optimizing dependencies because lockfile has changed
+Global Futura ERP server running at http://0.0.0.0:3000
+6:37:35 PM [vite] (client) hmr update /src/index.css
+6:37:39 PM [vite] (client) page reload public/debug-auth.html
+6:37:55 PM [vite] (client) page reload public/debug-auth.html
+6:38:12 PM [vite] (client) page reload public/debug-auth.html
+6:38:52 PM [vite] (client) page reload public/debug-auth.html
+6:45:04 PM [vite] (client) hmr update /src/App.tsx, /src/index.css
+6:50:22 PM [vite] (client) hmr update /src/App.tsx, /src/index.css
+6:50:41 PM [vite] (client) hmr update /src/App.tsx, /src/index.css
+6:52:17 PM [vite] (client) page reload public/debug-auth.html
+6:56:47 PM [vite] (client) page reload public/debug-auth.html

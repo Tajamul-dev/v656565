@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>🏢 Global Futura ERP — Command Center</title>
+<!-- ═══════════════════════════════════════════════════════════════
+     Dashboard.html — v2.1.0 — Global Futura Enhanced
+     Changes vs v2.0: unified emoji language, semantic status pills,
+                      KPI trend indicators, module emoji identity
+                      on every tile, illustrated empty states,
+                      emoji-prefixed quick actions, Unicode
+                      micro-icons, print-safe CSS.
+     Storage keys UNCHANGED. Module registry UNCHANGED.
+     Admin-only hiding logic UNCHANGED.
+     ═══════════════════════════════════════════════════════════════ -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@1,700;1,900&display=swap" rel="stylesheet">
+<script src="shared.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+    --bg-primary: #f8fafc;
+    --bg-secondary: #ffffff;
+    --bg-tertiary: #f1f5f9;
+    --text-primary: #0f172a;
+    --text-secondary: #334155;
+    --text-muted: #64748b;
+    --border-color: #cbd5e1;
+    --futura-red: #c0392b;
+    --futura-red-dark: #8a0f0f;
+    --futura-gold: #d4a72c;
+    --futura-gold-light: #f3d27a;
+    --futura-green: #2d5016;
+    --futura-green-light: #4a7c1f;
+    --accent-blue: #2563eb;
+    --accent-orange: #f97316;
+    --accent-green: #10b981;
+    --accent-purple: #8b5cf6;
+    --accent-red: #ef4444;
+    --accent-amber: #f59e0b;
+    --accent-teal: #0d9488;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 14px -2px rgba(0,0,0,0.08);
+    --shadow-lg: 0 12px 32px -8px rgba(0,0,0,0.12);
+    --radius: 12px;
+    --radius-sm: 8px;
+}
+[data-theme="dark"] {
+    --bg-primary: #0b0f19;
+    --bg-secondary: #151d30;
+    --bg-tertiary: #1e293b;
+    --text-primary: #f1f5f9;
+    --text-secondary: #cbd5e1;
+    --text-muted: #94a3b8;
+    --border-color: #23304d;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+    --shadow-md: 0 4px 14px -2px rgba(0,0,0,0.35);
+    --shadow-lg: 0 12px 32px -8px rgba(0,0,0,0.5);
+}
+html { scroll-behavior: smooth; }
+body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    padding: 20px 16px 40px;
+    line-height: 1.5;
+    transition: background 0.25s, color 0.25s;
+    -webkit-font-smoothing: antialiased;
+}
+.dashboard {
+    max-width: 1400px;
+    margin: 0 auto;
+    background: var(--bg-secondary);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    padding: 32px 40px 40px;
+    border: 1px solid var(--border-color);
+    position: relative;
+    overflow: hidden;
+}
+.dashboard::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 5px;
+    background: linear-gradient(90deg,
+        var(--futura-gold) 0%,
+        var(--futura-gold-light) 25%,
+        var(--futura-red) 50%,
+        var(--futura-red-dark) 75%,
+        var(--futura-green) 100%);
+    z-index: 1;
+}
+
+/* ══════════════════ HEADER ══════════════════ */
+.erp-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding-bottom: 24px;
+    border-bottom: 2px solid var(--border-color);
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex: 1;
+    min-width: 280px;
+}
+.logo-img {
+    height: 72px;
+    width: auto;
+    display: block;
+    flex-shrink: 0;
+    filter: drop-shadow(0 2px 6px rgba(192, 57, 43, 0.15));
+}
+.header-text {
+    flex: 1;
+    min-width: 200px;
+}
+.erp-title {
+    font-size: 26px;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, var(--futura-red), var(--futura-gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.1;
+    margin-bottom: 3px;
+}
+.erp-subtitle {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+}
+.erp-tagline {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 700;
+}
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.header-badge {
+    font-size: 11px;
+    font-weight: 900;
+    padding: 6px 14px;
+    border-radius: 20px;
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    border: 1.5px solid var(--border-color);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    letter-spacing: 0.3px;
+    text-decoration: none;
+    transition: all 0.15s;
+}
+a.header-badge:hover {
+    border-color: var(--futura-red);
+    color: var(--futura-red);
+}
+.header-badge.live {
+    background: #ecfdf5;
+    color: #065f46;
+    border-color: #86efac;
+}
+[data-theme="dark"] .header-badge.live {
+    background: rgba(16, 185, 129, 0.15);
+    color: #6ee7b7;
+}
+.header-badge.alert {
+    background: #fef2f2;
+    color: #991b1b;
+    border-color: #fca5a5;
+}
+[data-theme="dark"] .header-badge.alert {
+    background: rgba(239, 68, 68, 0.15);
+    color: #fecaca;
+}
+.header-badge.warn {
+    background: #fef3c7;
+    color: #78350f;
+    border-color: var(--futura-gold);
+}
+[data-theme="dark"] .header-badge.warn {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fde68a;
+}
+.header-badge .pulse {
+    width: 6px;
+    height: 6px;
+    background: currentColor;
+    border-radius: 50%;
+    animation: pulseDot 2s infinite;
+}
+@keyframes pulseDot {
+    0%,100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+.theme-toggle-btn {
+    background: var(--bg-primary);
+    border: 1.5px solid var(--border-color);
+    border-radius: 20px;
+    padding: 7px 14px;
+    cursor: pointer;
+    font-size: 18px;
+    color: var(--text-primary);
+    transition: transform 0.15s, border-color 0.15s;
+}
+.theme-toggle-btn:hover {
+    transform: scale(1.06) rotate(8deg);
+    border-color: var(--accent-orange);
+}
+
+/* ══════════════════ GREETING BAR ══════════════════ */
+.greeting-bar {
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border: 1.5px solid #86efac;
+    border-radius: var(--radius);
+    padding: 18px 24px;
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px;
+}
+[data-theme="dark"] .greeting-bar {
+    background: linear-gradient(135deg, #0d281e 0%, #064e3b 100%);
+    border-color: #065f46;
+}
+.greeting-text {
+    flex: 1;
+    min-width: 260px;
+}
+.greeting-main {
+    font-size: 17px;
+    font-weight: 800;
+    color: #065f46;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+[data-theme="dark"] .greeting-main { color: #6ee7b7; }
+.greeting-name-highlight {
+    color: #c0392b;
+}
+[data-theme="dark"] .greeting-name-highlight { color: #f3d27a; }
+.greeting-sub {
+    font-size: 12.5px;
+    color: #047857;
+    font-weight: 600;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+[data-theme="dark"] .greeting-sub { color: #a7f3d0; }
+.greeting-sub .clock {
+    font-variant-numeric: tabular-nums;
+    font-weight: 800;
+    color: #065f46;
+}
+[data-theme="dark"] .greeting-sub .clock { color: #6ee7b7; }
+.overlap-badge {
+    background: #065f46;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 0.4px;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+.overlap-badge .dot {
+    width: 6px;
+    height: 6px;
+    background: #4ade80;
+    border-radius: 50%;
+    animation: pulseDot 2s infinite;
+}
+
+/* ══════════════════ KPI STRIP ══════════════════ */
+.kpi-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 12px;
+    margin-bottom: 32px;
+}
+.kpi-card {
+    background: var(--bg-tertiary);
+    border: 1.5px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    position: relative;
+    transition: border-color 0.15s, transform 0.15s;
+}
+.kpi-card:hover {
+    border-color: var(--accent-orange);
+    transform: translateY(-2px);
+}
+.kpi-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 4px;
+    border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+    background: var(--accent-orange);
+}
+.kpi-card.blue::before { background: var(--accent-blue); }
+.kpi-card.green::before { background: var(--accent-green); }
+.kpi-card.purple::before { background: var(--accent-purple); }
+.kpi-card.gold::before { background: var(--futura-gold); }
+.kpi-card.red::before { background: var(--accent-red); }
+.kpi-card.teal::before { background: var(--accent-teal); }
+
+/* KPI icon (large colored emoji) */
+.kpi-icon {
+    font-size: 26px;
+    line-height: 1;
+    margin-bottom: 2px;
+    filter: drop-shadow(0 2px 3px rgba(0,0,0,0.12));
+}
+
+.kpi-card .kpi-lbl {
+    font-size: 10px;
+    font-weight: 900;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.kpi-card .kpi-val {
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--text-primary);
+    font-variant-numeric: tabular-nums;
+    line-height: 1.1;
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+}
+.kpi-card .kpi-val .trend {
+    font-size: 13px;
+    font-weight: 900;
+}
+.kpi-card .kpi-val .trend.up   { color: var(--accent-green); }
+.kpi-card .kpi-val .trend.down { color: var(--accent-red); }
+.kpi-card .kpi-val .trend.flat { color: var(--text-muted); }
+
+.kpi-card .kpi-sub {
+    font-size: 10.5px;
+    color: var(--text-muted);
+    font-weight: 700;
+}
+/* Semantic warn state (alerts) */
+.kpi-card.alert-state {
+    border-color: var(--accent-red);
+    background: linear-gradient(135deg, #fef2f2, var(--bg-tertiary) 60%);
+}
+[data-theme="dark"] .kpi-card.alert-state {
+    background: linear-gradient(135deg, rgba(239,68,68,0.08), var(--bg-tertiary) 60%);
+}
+
+/* ══════════════════ QUICK ACTIONS ══════════════════ */
+.quick-actions-bar {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+    padding: 14px 18px;
+    background: var(--bg-tertiary);
+    border: 1.5px solid var(--border-color);
+    border-radius: var(--radius);
+    align-items: center;
+}
+.quick-actions-label {
+    font-size: 11px;
+    font-weight: 900;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-right: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.quick-action-btn {
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 11.5px;
+    font-weight: 800;
+    text-decoration: none;
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+.quick-action-btn.blue { background: #dbeafe; color: #1e40af; border: 1px solid var(--accent-blue); }
+.quick-action-btn.green { background: #dcfce7; color: #065f46; border: 1px solid var(--accent-green); }
+.quick-action-btn.gold { background: #fef3c7; color: #78350f; border: 1px solid var(--futura-gold); }
+.quick-action-btn.purple { background: #ede9fe; color: #5b21b6; border: 1px solid var(--accent-purple); }
+.quick-action-btn.teal { background: #ccfbf1; color: #115e59; border: 1px solid var(--accent-teal); }
+.quick-action-btn:hover { transform: translateY(-2px); filter: brightness(1.08); }
+[data-theme="dark"] .quick-action-btn.blue { background: rgba(37,99,235,0.2); color: #93c5fd; }
+[data-theme="dark"] .quick-action-btn.green { background: rgba(16,185,129,0.2); color: #6ee7b7; }
+[data-theme="dark"] .quick-action-btn.gold { background: rgba(245,158,11,0.2); color: #fde68a; }
+[data-theme="dark"] .quick-action-btn.purple { background: rgba(139,92,246,0.2); color: #c4b5fd; }
+[data-theme="dark"] .quick-action-btn.teal { background: rgba(13,148,136,0.2); color: #5eead4; }
+
+/* ══════════════════ SECTION ══════════════════ */
+.section {
+    margin-bottom: 32px;
+}
+.section:last-of-type {
+    margin-bottom: 24px;
+}
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--border-color);
+}
+.section-title {
+    font-size: 15px;
+    font-weight: 900;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.section-title .section-icon { font-size: 22px; }
+.section-count {
+    font-size: 10.5px;
+    font-weight: 900;
+    color: var(--text-muted);
+    padding: 3px 10px;
+    border-radius: 12px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    letter-spacing: 0.4px;
+}
+.section-count.live-count {
+    background: #dcfce7;
+    color: #065f46;
+    border-color: #86efac;
+}
+[data-theme="dark"] .section-count.live-count {
+    background: rgba(16,185,129,0.15);
+    color: #6ee7b7;
+}
+.section-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border-color);
+}
+
+/* ══════════════════ MODULE GRID ══════════════════ */
+.module-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 14px;
+}
+
+/* ══════════════════ MODULE CARD ══════════════════ */
+.module-card {
+    background: var(--bg-tertiary);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius);
+    padding: 18px 18px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-height: 190px;
+    cursor: pointer;
+    transition: transform 0.18s, border-color 0.18s, box-shadow 0.18s;
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+}
+.module-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--futura-red);
+    opacity: 0;
+    transition: opacity 0.18s;
+}
+.module-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--futura-red);
+    box-shadow: var(--shadow-md);
+}
+.module-card:hover::before {
+    opacity: 1;
+}
+.module-card.live {
+    background: var(--bg-secondary);
+}
+.module-card.live:hover {
+    border-color: var(--accent-green);
+}
+.module-card.live:hover::before {
+    background: var(--accent-green);
+    opacity: 1;
+}
+.module-card.partial:hover {
+    border-color: var(--futura-gold);
+}
+.module-card.partial:hover::before {
+    background: var(--futura-gold);
+    opacity: 1;
+}
+.module-card.coming {
+    opacity: 0.72;
+    cursor: default;
+}
+.module-card.coming:hover {
+    transform: translateY(-1px);
+    border-color: var(--border-color);
+    box-shadow: var(--shadow-sm);
+}
+.module-card.coming:hover::before {
+    opacity: 0;
+}
+
+/* MODULE ICON — big, gradient, colored */
+.module-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    background: linear-gradient(135deg, var(--futura-red), var(--futura-red-dark));
+    box-shadow: 0 3px 8px rgba(192, 57, 43, 0.25);
+    color: white;
+    flex-shrink: 0;
+}
+.module-card.blue-icon .module-icon {
+    background: linear-gradient(135deg, var(--accent-blue), #1e40af);
+    box-shadow: 0 3px 8px rgba(37, 99, 235, 0.25);
+}
+.module-card.green-icon .module-icon {
+    background: linear-gradient(135deg, var(--accent-green), #059669);
+    box-shadow: 0 3px 8px rgba(16, 185, 129, 0.25);
+}
+.module-card.purple-icon .module-icon {
+    background: linear-gradient(135deg, var(--accent-purple), #6d28d9);
+    box-shadow: 0 3px 8px rgba(139, 92, 246, 0.25);
+}
+.module-card.gold-icon .module-icon {
+    background: linear-gradient(135deg, var(--futura-gold), #a67c1a);
+    box-shadow: 0 3px 8px rgba(212, 167, 44, 0.25);
+}
+.module-card.red-icon .module-icon {
+    background: linear-gradient(135deg, var(--accent-red), #b91c1c);
+    box-shadow: 0 3px 8px rgba(239, 68, 68, 0.25);
+}
+.module-card.teal-icon .module-icon {
+    background: linear-gradient(135deg, var(--accent-teal), #0f766e);
+    box-shadow: 0 3px 8px rgba(13, 148, 136, 0.25);
+}
+.module-card.coming .module-icon {
+    background: var(--bg-primary);
+    border: 2px dashed var(--border-color);
+    box-shadow: none;
+    opacity: 0.7;
+}
+
+.module-name {
+    font-size: 14.5px;
+    font-weight: 900;
+    color: var(--text-primary);
+    line-height: 1.2;
+    letter-spacing: -0.2px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.module-desc {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 600;
+    line-height: 1.4;
+    flex: 1;
+}
+
+/* STATUS PILL — semantic color + emoji + text */
+.module-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 9.5px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 4px 10px;
+    border-radius: 10px;
+    border: 1.5px solid;
+    align-self: flex-start;
+}
+.module-status.live {
+    background: #ecfdf5;
+    color: #065f46;
+    border-color: #10b981;
+}
+[data-theme="dark"] .module-status.live {
+    background: rgba(16, 185, 129, 0.15);
+    color: #6ee7b7;
+}
+.module-status.partial {
+    background: #fef3c7;
+    color: #78350f;
+    border-color: var(--futura-gold);
+}
+[data-theme="dark"] .module-status.partial {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fde68a;
+}
+.module-status.coming {
+    background: var(--bg-primary);
+    color: var(--text-muted);
+    border-color: var(--border-color);
+}
+.module-status .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+}
+.module-status.live .dot {
+    animation: pulseDot 2s infinite;
+}
+
+.module-action {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--futura-red);
+    padding-top: 8px;
+    border-top: 1px solid var(--border-color);
+    margin-top: auto;
+}
+.module-card.live .module-action {
+    color: var(--accent-green);
+}
+.module-card.partial .module-action {
+    color: var(--futura-gold);
+}
+.module-card.coming .module-action {
+    color: var(--text-muted);
+}
+.module-action .arrow {
+    transition: transform 0.15s;
+}
+.module-card:hover .module-action .arrow {
+    transform: translateX(4px);
+}
+.module-card.coming:hover .module-action .arrow {
+    transform: none;
+}
+
+/* Admin-only badge on module card */
+.module-admin-tag {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 9px;
+    font-weight: 900;
+    padding: 3px 8px;
+    border-radius: 8px;
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #ef4444;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+}
+[data-theme="dark"] .module-admin-tag {
+    background: rgba(239,68,68,0.15);
+    color: #fecaca;
+}
+
+/* ══════════════════ FOOTER ══════════════════ */
+.erp-footer {
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 2px solid var(--border-color);
+    text-align: center;
+}
+.company-info {
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    line-height: 1.75;
+    font-weight: 600;
+    margin-bottom: 14px;
+}
+.company-info strong {
+    color: var(--futura-red);
+    font-weight: 900;
+}
+.footer-meta {
+    font-size: 10.5px;
+    color: var(--text-muted);
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.footer-meta strong {
+    color: var(--futura-gold);
+    font-weight: 900;
+}
+.footer-meta .sep {
+    color: var(--border-color);
+}
+
+/* ══════════════════ TOAST ══════════════════ */
+.toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--accent-blue);
+    color: white;
+    padding: 12px 22px;
+    border-radius: var(--radius);
+    font-weight: 800;
+    font-size: 13px;
+    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.35);
+    display: none;
+    z-index: 9999;
+    max-width: 340px;
+}
+.toast.show {
+    display: block;
+    animation: toastIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes toastIn {
+    from { opacity: 0; transform: translateY(30px) scale(0.9); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ══════════════════ PRINT ══════════════════ */
+@media print {
+    .theme-toggle-btn, .back-btn, .gfi-user-chip, .gfi-signout-btn,
+    .gfi-activity-ticker, .gfi-activity-drawer, .gfi-activity-drawer-overlay,
+    .quick-actions-bar, .toast { display: none !important; }
+    body { padding: 0; background: #fff; }
+    .dashboard { box-shadow: none; border: none; }
+    .module-card::before { opacity: 0 !important; }
+}
+
+/* ══════════════════ RESPONSIVE ══════════════════ */
+@media (max-width: 900px) {
+    .dashboard { padding: 24px 20px 28px; }
+    .erp-header { gap: 16px; padding-bottom: 18px; }
+    .logo-img { height: 56px; }
+    .erp-title { font-size: 20px; }
+    .erp-subtitle { font-size: 10px; letter-spacing: 1.5px; }
+    .module-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+    .module-card { padding: 14px; min-height: 170px; }
+    .module-icon { width: 38px; height: 38px; font-size: 20px; }
+    .module-name { font-size: 13px; }
+    .module-desc { font-size: 10px; }
+    .kpi-card .kpi-val { font-size: 18px; }
+    .kpi-icon { font-size: 22px; }
+    .greeting-main { font-size: 15px; }
+    .toast { bottom: 16px; right: 16px; left: 16px; max-width: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="dashboard">
+
+    <!-- ══════════════════ HEADER ══════════════════ -->
+    <div class="erp-header">
+        <div class="header-left">
+            <img class="logo-img" id="futuraLogo" alt="Futura">
+            <div class="header-text">
+                <div class="erp-title">🏢 Global Futura ERP</div>
+                <div class="erp-subtitle">Command Center</div>
+                <div class="erp-tagline">Nature's Best • Enterprise Edition</div>
+            </div>
+        </div>
+        <div class="header-right">
+            <span class="header-badge live" id="systemBadge">
+                <span class="pulse"></span>
+                🟢 System Online
+            </span>
+            <a class="header-badge alert" id="notifBadge" href="Notifications.html" style="display:none;">
+                🔔 <span id="notifCount">0</span> Alerts
+            </a>
+            <span class="header-badge" id="dateBadge">📅 —</span>
+            <button class="theme-toggle-btn" id="themeBtn" onclick="toggleTheme()" title="Toggle theme">🌙</button>
+            <!-- user chip + sign-out will be injected here by shared.js -->
+        </div>
+    </div>
+
+    <!-- ══════════════════ GREETING ══════════════════ -->
+    <div class="greeting-bar">
+        <div class="greeting-text">
+            <div class="greeting-main" id="greetingMain">👋 Good morning.</div>
+            <div class="greeting-sub">
+                <span id="greetingDate">—</span>
+                <span class="clock" id="greetingClock">—</span>
+            </div>
+        </div>
+        <div class="overlap-badge" id="overlapBadge">
+            <span class="dot"></span>
+            <span id="overlapText">🌐 Calculating…</span>
+        </div>
+    </div>
+
+    <!-- ══════════════════ KPI STRIP ══════════════════ -->
+    <div class="kpi-strip" id="kpiStrip"></div>
+
+    <!-- ══════════════════ QUICK ACTIONS ══════════════════ -->
+    <div class="quick-actions-bar">
+        <span class="quick-actions-label">⚡ Quick Actions:</span>
+        <a class="quick-action-btn purple" href="Leads.html">🎯 + New Lead</a>
+        <a class="quick-action-btn blue" href="Quotations.html">📄 + New Quote</a>
+        <a class="quick-action-btn green" href="Invoicing.html">🧾 + New Invoice</a>
+        <a class="quick-action-btn gold" href="Payments.html">💳 Record Payment</a>
+        <a class="quick-action-btn teal" href="PackingTracker.html">📦 Packing Tracker</a>
+    </div>
+
+    <!-- ══════════════════ MODULES ══════════════════ -->
+    <div id="modulesRoot"></div>
+
+    <!-- ══════════════════ FOOTER ══════════════════ -->
+    <div class="erp-footer">
+        <div class="company-info">
+            <strong>🌐 Global Futura Inc.</strong><br>
+            500 N Broadway, Suite 163, Jericho, NY 11753, USA<br>
+            📞 +1 (347) 446-2333 &nbsp;•&nbsp; ✉️ marketing@globaloils.us &nbsp;•&nbsp; 🧾 Tax ID: 88-4093389
+        </div>
+        <div class="footer-meta">
+            <span>💻 Developed by <strong>Sarabjit Singh Rakhra</strong></span>
+            <span class="sep">•</span>
+            <span>© 2026 Global Futura Inc.</span>
+            <span class="sep">•</span>
+            <span>ERP v2.1.0</span>
+        </div>
+    </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- shared.js already loaded in <head> -->
+
+<script>
+(function() {
+    "use strict";
+
+    // ═══════════════════════════════════════════════════════════════
+    // SHARED.JS AUTH GATE
+    // ═══════════════════════════════════════════════════════════════
+    if (!GFI.requireLogin()) return;
+
+    const currentUser = GFI.getCurrentUser();
+    const isAdmin = GFI.isAdmin();
+
+    // ═══════════════════════════════════════════════════════════════
+    // FUTURA LOGO (embedded SVG)
+    // ═══════════════════════════════════════════════════════════════
+    const FUTURA_LOGO_SVG = `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 175">
+        <defs>
+            <linearGradient id="lgGold" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#f9e69a"/><stop offset="50%" stop-color="#d4a72c"/><stop offset="100%" stop-color="#a67c1a"/>
+            </linearGradient>
+            <linearGradient id="lgRed" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#d4252e"/><stop offset="55%" stop-color="#b01820"/><stop offset="100%" stop-color="#6f0c14"/>
+            </linearGradient>
+            <linearGradient id="lgShine" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="rgba(255,255,255,0)"/><stop offset="50%" stop-color="rgba(255,255,255,0.18)"/><stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+            </linearGradient>
+            <linearGradient id="lgLeaf" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#8bc43a"/><stop offset="100%" stop-color="#2d5016"/>
+            </linearGradient>
+        </defs>
+        <path d="M15,30 Q200,8 385,30 L385,145 Q200,167 15,145 Z" fill="url(#lgGold)"/>
+        <path d="M28,42 Q200,22 372,42 L372,133 Q200,153 28,133 Z" fill="url(#lgRed)"/>
+        <path d="M28,42 Q200,22 372,42 L372,88 Q200,68 28,88 Z" fill="url(#lgShine)"/>
+        <text x="200" y="82" text-anchor="middle" fill="#fff" font-family="Inter,Arial,sans-serif" font-size="17" font-weight="600" letter-spacing="0.5">Nature's Best</text>
+        <text x="200" y="132" text-anchor="middle" fill="#fff" font-family="Playfair Display,Georgia,serif" font-size="62" font-weight="900" font-style="italic" letter-spacing="2">Futura</text>
+        <g>
+            <path d="M310,68 Q345,25 392,12 Q355,48 322,80 Z" fill="url(#lgLeaf)" stroke="#1f3d0f" stroke-width="1.2"/>
+            <path d="M316,78 Q350,42 392,28 Q352,64 328,90 Z" fill="url(#lgLeaf)" stroke="#1f3d0f" stroke-width="1.2" opacity="0.92"/>
+        </g>
+    </svg>`;
+    document.getElementById('futuraLogo').src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(FUTURA_LOGO_SVG);
+
+    // ═══════════════════════════════════════════════════════════════
+    // MODULE REGISTRY — IDENTICAL to v2.0 (with canonical module emoji)
+    // ═══════════════════════════════════════════════════════════════
+    const SECTIONS = [
+        {
+            id: 'sales',
+            title: 'Sales & Marketing',
+            icon: '💼',
+            modules: [
+                { id:'leads',      icon:'🎯', name:'Leads',           desc:'Sales pipeline, prospect tracking, conversion funnel', status:'live', href:'Leads.html', color:'purple-icon' },
+                { id:'quotations', icon:'📄', name:'Quotations',      desc:'Quote lifecycle, versioning, expiry tracking', status:'live', href:'Quotations.html', color:'purple-icon' },
+                { id:'oilcost',    icon:'🛢️', name:'OilCost Pro',     desc:'Costing, quoting, reverse costing, negotiation log', status:'live', href:'OilCostPro.html', color:'' },
+                { id:'crm',        icon:'💬', name:'CRM',             desc:'Client directory, contacts, interaction history', status:'live', href:'CRM.html', color:'blue-icon' }
+            ]
+        },
+        {
+            id: 'operations',
+            title: 'Operations',
+            icon: '📦',
+            modules: [
+                { id:'procurement',    icon:'📦', name:'Procurement',      desc:'Oil & honey orders, materials, label POs, reports', status:'live', href:'Procurement.html', color:'blue-icon' },
+                { id:'packingtracker', icon:'📦', name:'Packing Tracker',  desc:'Client orders, PM tracking, live inventory sync', status:'live', href:'PackingTracker.html', color:'teal-icon' },
+                { id:'purchaseorders', icon:'🛒', name:'Purchase Orders',  desc:'Supplier POs, GRN, rate contracts, approvals', status:'live', href:'PurchaseOrders.html', color:'blue-icon' },
+                { id:'production',     icon:'🏭', name:'Production',       desc:'Batch planning, BOM recipes, QC, yield tracking', status:'live', href:'Production.html', color:'green-icon' },
+                { id:'inventory',      icon:'📊', name:'Inventory',        desc:'Stock levels, reorder alerts, warehouse locations', status:'live', href:'Inventory.html', color:'green-icon' },
+                { id:'shipments',      icon:'🚢', name:'Shipments',        desc:'Container tracking, BL, ETA, port status', status:'live', href:'ShipmentTracker.html', color:'blue-icon' }
+            ]
+        },
+        {
+            id: 'finance',
+            title: 'Finance',
+            icon: '💰',
+            modules: [
+                { id:'invoicing',  icon:'🧾', name:'Invoicing',     desc:'Tax invoices, Proforma conversion, GST compliance', status:'live', href:'Invoicing.html', color:'gold-icon' },
+                { id:'payments',   icon:'💳', name:'Payments',      desc:'Receipts, aging, reminders, bank reconciliation', status:'live', href:'Payments.html', color:'green-icon' },
+                { id:'reports',    icon:'📈', name:'Reports',       desc:'P&L, Balance Sheet, Cash Flow, Trial Balance', status:'live', href:'Reports.html', color:'gold-icon' },
+                { id:'accounting', icon:'💰', name:'Accounting',    desc:'Chart of accounts, journal entries, ledger', status:'live', href:'Accounting.html', color:'gold-icon' }
+            ]
+        },
+        {
+            id: 'masters',
+            title: 'Masters & Admin',
+            icon: '🏢',
+            modules: [
+                { id:'masters',       icon:'📂', name:'Masters Hub',   desc:'Clients, Suppliers, Products, SKUs, Brands, Ports', status:'live', href:'Masters.html', color:'purple-icon' },
+                { id:'users',         icon:'👤', name:'Users',         desc:'Multi-user access, roles, permissions, audit log', status:'live', href:'Users.html', color:'blue-icon', adminOnly:true },
+                { id:'settings',      icon:'⚙️', name:'Settings',      desc:'Company info, bank details, defaults, backup', status:'live', href:'Settings.html', color:'gold-icon', adminOnly:true },
+                { id:'documentvault', icon:'📄', name:'Documents',     desc:'COAs, BOLs, contracts, certificates — vault', status:'live', href:'DocumentVault.html', color:'blue-icon' }
+            ]
+        },
+        {
+            id: 'analytics',
+            title: 'Analytics & Intelligence',
+            icon: '📊',
+            modules: [
+                { id:'bizdash',       icon:'📊', name:'Business Dash',  desc:'Cross-module KPIs, live business snapshot', status:'live', href:'Analytics.html', color:'blue-icon' },
+                { id:'notifications', icon:'🔔', name:'Notifications',  desc:'Unified alert feed from all modules', status:'live', href:'Notifications.html', color:'gold-icon' },
+                { id:'activitylog',   icon:'📋', name:'Activity Log',   desc:'Full audit trail of every user action', status:'live', href:'ActivityLog.html', color:'teal-icon' },
+                { id:'forecasting',   icon:'📈', name:'Forecasting',    desc:'Demand prediction, seasonality, trends', status:'coming', href:'#', color:'green-icon' },
+                { id:'pl',            icon:'📉', name:'P&L Analysis',   desc:'Profit & loss by product, client, region', status:'coming', href:'#', color:'' },
+                { id:'cashflow',      icon:'💹', name:'Cash Flow',      desc:'Inflows, outflows, runway, projection', status:'coming', href:'#', color:'gold-icon' }
+            ]
+        },
+        {
+            id: 'utilities',
+            title: 'Utilities',
+            icon: '🔧',
+            modules: [
+                { id:'auditlog', icon:'🔐', name:'Audit Log',    desc:'Who changed what, when — full traceability', status:'coming', href:'#', color:'' },
+                { id:'mobile',   icon:'📱', name:'Mobile App',   desc:'PWA for phone — offline-ready access', status:'coming', href:'#', color:'' },
+                { id:'backups',  icon:'🗄️', name:'Backups',     desc:'Automatic snapshots, export, restore', status:'live', href:'Settings.html', color:'purple-icon', adminOnly:true }
+            ]
+        }
+    ];
+
+    // ═══════════════════════════════════════════════════════════════
+    // RENDER MODULES — identical structure, emoji-enhanced pills
+    // ═══════════════════════════════════════════════════════════════
+    function renderModules() {
+        const root = document.getElementById('modulesRoot');
+        if (!root) return;
+        let html = '';
+
+        SECTIONS.forEach(section => {
+            const visibleModules = section.modules.filter(m => !m.adminOnly || isAdmin);
+
+            const liveCount = visibleModules.filter(m => m.status === 'live').length;
+            const partialCount = visibleModules.filter(m => m.status === 'partial').length;
+            const totalActive = liveCount + partialCount;
+            const totalVisible = visibleModules.length;
+
+            if (totalVisible === 0) return;
+
+            html += `
+                <div class="section" data-section="${section.id}">
+                    <div class="section-header">
+                        <div class="section-title">
+                            <span class="section-icon">${section.icon}</span>
+                            ${section.title}
+                        </div>
+                        <span class="section-count ${totalActive === totalVisible ? 'live-count' : ''}">
+                            ${totalActive === totalVisible ? '✅' : '📊'} ${totalActive} of ${totalVisible} active
+                        </span>
+                        <div class="section-line"></div>
+                    </div>
+                    <div class="module-grid">
+            `;
+
+            visibleModules.forEach(m => {
+                const statusClass = m.status;
+                const statusIcon  = m.status === 'live' ? '🟢' : (m.status === 'partial' ? '🟡' : '⚫');
+                const statusLabel = m.status === 'live' ? 'Live' : (m.status === 'partial' ? 'Available' : 'Coming Soon');
+                const actionLabel = m.status === 'coming' ? 'Planned' : 'Open';
+                const clickable   = m.status !== 'coming';
+                const onclick     = clickable ? `onclick="openModule('${m.id}','${m.href}')"` : `onclick="showComingSoon('${m.name}')"`;
+                const hrefAttr    = clickable ? `href="${m.href}"` : `href="javascript:void(0)"`;
+                const adminTag    = m.adminOnly ? `<span class="module-admin-tag">🛡️ Admin</span>` : '';
+                const actionArrow = clickable ? '<span class="arrow">→</span>' : '<span class="arrow" style="opacity:0.4;">⏳</span>';
+
+                html += `
+                    <a class="module-card ${statusClass} ${m.color} ${m.adminOnly ? 'admin-only' : ''}" ${hrefAttr} ${onclick}>
+                        ${adminTag}
+                        <div class="module-icon">${m.icon}</div>
+                        <div class="module-name">${m.icon} ${m.name}</div>
+                        <div class="module-desc">${m.desc}</div>
+                        <div class="module-status ${statusClass}">
+                            <span class="dot"></span>
+                            ${statusIcon} ${statusLabel}
+                        </div>
+                        <div class="module-action">
+                            <span>${actionLabel}</span>
+                            ${actionArrow}
+                        </div>
+                    </a>
+                `;
+            });
+
+            html += `
+                    </div>
+                </div>
+            `;
+        });
+
+        root.innerHTML = html;
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // MODULE ACTIONS
+    // ═══════════════════════════════════════════════════════════════
+    window.openModule = function(id, href) {
+        if (!href || href === '#') {
+            showComingSoon(id);
+            return;
+        }
+
+        const moduleName = SECTIONS
+            .flatMap(s => s.modules)
+            .find(m => m.id === id)?.name || id;
+
+        GFI.logActivity({
+            actionType: 'view',
+            module: 'Dashboard',
+            targetLabel: moduleName,
+            summary: `Opened ${moduleName}`
+        });
+
+        window.location.href = href;
+    };
+
+    window.showComingSoon = function(name) {
+        showToast(`🔧 ${name} — Planned module. Will be built soon.`);
+    };
+
+    function showToast(msg) {
+        const t = document.getElementById('toast');
+        if (!t) return;
+        t.textContent = msg;
+        t.classList.add('show');
+        clearTimeout(t._t);
+        t._t = setTimeout(() => t.classList.remove('show'), 2800);
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // THEME
+    // ═══════════════════════════════════════════════════════════════
+    window.toggleTheme = function() {
+        const html = document.documentElement;
+        const current = html.getAttribute('data-theme');
+        const next = current === 'dark' ? 'light' : 'dark';
+        html.setAttribute('data-theme', next);
+        document.getElementById('themeBtn').textContent = next === 'dark' ? '☀️' : '🌙';
+        try { localStorage.setItem('futura_dashboard_theme', next); } catch(e) {}
+        GFI.logActivity({
+            actionType: 'system',
+            module: 'Dashboard',
+            summary: `Switched theme to ${next}`
+        });
+    };
+    try {
+        const savedTheme = localStorage.getItem('futura_dashboard_theme');
+        if (savedTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.getElementById('themeBtn').textContent = '☀️';
+        }
+    } catch(e) {}
+
+    // ═══════════════════════════════════════════════════════════════
+    // LIVE CLOCK + DATE + OVERLAP
+    // ═══════════════════════════════════════════════════════════════
+    const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+
+    function pad2(n) { return String(n).padStart(2, '0'); }
+
+    function getGreeting() {
+        const h = new Date().getHours();
+        if (h < 5) return { text: 'Good night', ico: '🌙' };
+        if (h < 12) return { text: 'Good morning', ico: '☀️' };
+        if (h < 17) return { text: 'Good afternoon', ico: '🌤️' };
+        if (h < 21) return { text: 'Good evening', ico: '🌆' };
+        return { text: 'Good night', ico: '🌙' };
+    }
+
+    function updateClock() {
+        const d = new Date();
+        const g = getGreeting();
+        const firstName = (currentUser.name || '').split(' ')[0] || 'there';
+        document.getElementById('greetingMain').innerHTML =
+            `${g.ico} ${g.text}, <span class="greeting-name-highlight">${GFI.esc(firstName)}</span> ${roleEmoji()}`;
+        document.getElementById('greetingDate').textContent =
+            `📅 ${DAYS[d.getDay()]}, ${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+        document.getElementById('dateBadge').textContent =
+            `📅 ${d.getDate()} ${MONTHS[d.getMonth()].slice(0,3)} ${d.getFullYear()}`;
+        let h = d.getHours();
+        const ampm = h >= 12 ? 'PM' : 'AM';
+        h = h % 12 || 12;
+        document.getElementById('greetingClock').textContent =
+            `🕐 ${pad2(h)}:${pad2(d.getMinutes())}:${pad2(d.getSeconds())} ${ampm}`;
+    }
+
+    function roleEmoji() {
+        return { owner:'👑', admin:'🛡️', editor:'✏️', viewer:'👁️' }[currentUser.role] || '';
+    }
+
+    function getZoneHour(tz) {
+        try {
+            const parts = new Intl.DateTimeFormat('en-US', {
+                timeZone: tz, hour: '2-digit', hour12: false
+            }).formatToParts(new Date());
+            const h = parts.find(p => p.type === 'hour');
+            return h ? parseInt(h.value, 10) % 24 : new Date().getHours();
+        } catch (e) { return new Date().getHours(); }
+    }
+
+    function computeOverlap() {
+        const nyH = getZoneHour('America/New_York');
+        const inH = getZoneHour('Asia/Kolkata');
+        const nyOpen = nyH >= 9 && nyH < 18;
+        const inOpen = inH >= 9 && inH < 18;
+        const el = document.getElementById('overlapText');
+        if (!el) return;
+        if (nyOpen && inOpen) el.textContent = '🟢 NY & India both open';
+        else if (nyOpen)      el.textContent = '🟡 NY open · India closed';
+        else if (inOpen)      el.textContent = '🟡 India open · NY closed';
+        else                  el.textContent = '⚫ Both closed — off-hours';
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // KPI STRIP — same calculations, emoji + trend enhanced
+    // ═══════════════════════════════════════════════════════════════
+    function loadKpis() {
+        const invoices   = GFI.loadJSON('gfi_acc_invoices', []) || [];
+        const payments   = GFI.loadJSON('gfi_acc_payments', []) || [];
+        const leads      = GFI.loadJSON('gfi_leads', []) || [];
+        const quotations = GFI.loadJSON('gfi_quotations', []) || [];
+        const clients    = GFI.loadJSON('gfi_masters_clients_v1', []) || [];
+        const suppliers  = GFI.loadJSON('gfi_masters_suppliers_v1', []) || [];
+        const inventory  = GFI.loadJSON('gfi_inv_items', []) || [];
+        const packOrders = GFI.loadJSON('gfi_pack_orders_v2', []) || [];
+
+        const totalRevenue = invoices
+            .filter(i => i.status !== 'cancelled' && i.status !== 'draft')
+            .reduce((s, i) => s + (i.total || 0), 0);
+        const totalCollected = payments.reduce((s, p) => s + (p.amount || 0), 0);
+        const openQuotes = quotations
+            .filter(q => ['draft','sent','viewed','negotiating'].includes(q.status)).length;
+        const quoteValue = quotations
+            .filter(q => ['draft','sent','viewed','negotiating'].includes(q.status))
+            .reduce((s, q) => s + (q.total || 0), 0);
+        const activeLeads = leads
+            .filter(l => l.stage !== 'won' && l.stage !== 'lost').length;
+        const pipelineValue = leads
+            .filter(l => l.stage !== 'won' && l.stage !== 'lost')
+            .reduce((s, l) => s + (l.value || 0), 0);
+        const inventoryValue = inventory.reduce((s, i) => s + (i.quantity || 0) * (i.cost || 0), 0);
+        const stockAlerts = inventory.filter(i => i.quantity <= (i.minLevel || 0)).length;
+
+        const activePackOrders = packOrders.filter(o => !o.archived).length;
+        const urgentPackOrders = packOrders.filter(o => !o.archived && o.priority === 'urgent').length;
+        const completePackOrders = packOrders.filter(o => {
+            if (o.archived) return false;
+            const mats = o.materials || {};
+            const keys = ['preform','bottle','cap','carton','label','pallet'];
+            let done = 0, total = 0;
+            keys.forEach(k => {
+                const st = (mats[k] && mats[k].status) || 'notstarted';
+                if (st === 'na') return;
+                total++;
+                if (['available','received','approved'].includes(st)) done++;
+            });
+            return total > 0 && done === total;
+        }).length;
+
+        const today = GFI.todayISO();
+        const overdueInvoices = invoices.filter(i => {
+            if (i.status === 'cancelled' || i.status === 'draft') return false;
+            const paid = payments.filter(p => p.invoiceId === i.id).reduce((s, p) => s + (p.amount || 0), 0);
+            return i.dueDate && i.dueDate < today && paid < (i.total || 0);
+        }).length;
+
+        const expiringQuotes = quotations.filter(q => {
+            if (!q.expiryDate) return false;
+            const days = Math.ceil((new Date(q.expiryDate) - new Date()) / 86400000);
+            return days >= 0 && days <= 7 && !['accepted','rejected','expired'].includes(q.status);
+        }).length;
+
+        const totalAlerts = overdueInvoices + expiringQuotes + stockAlerts;
+        const nb = document.getElementById('notifBadge');
+        const nc = document.getElementById('notifCount');
+        if (nb && nc) {
+            if (totalAlerts > 0) {
+                nb.style.display = 'inline-flex';
+                nc.textContent = totalAlerts;
+            } else {
+                nb.style.display = 'none';
+            }
+        }
+
+        // ── Trend: last 30 days vs prior 30 days revenue ──
+        const now = Date.now();
+        const revenueLast30 = invoices
+            .filter(i => i.status !== 'cancelled' && i.status !== 'draft' && i.date)
+            .filter(i => (now - new Date(i.date).getTime()) / 86400000 <= 30)
+            .reduce((s, i) => s + (i.total || 0), 0);
+        const revenuePrior30 = invoices
+            .filter(i => i.status !== 'cancelled' && i.status !== 'draft' && i.date)
+            .filter(i => {
+                const d = (now - new Date(i.date).getTime()) / 86400000;
+                return d > 30 && d <= 60;
+            })
+            .reduce((s, i) => s + (i.total || 0), 0);
+        const revTrend = revenueLast30 > revenuePrior30
+            ? '<span class="trend up">📈</span>'
+            : (revenueLast30 < revenuePrior30
+                ? '<span class="trend down">📉</span>'
+                : '<span class="trend flat">➡️</span>');
+
+        const kpis = [
+            { ico:'💰', lbl:'Total Revenue', val:'$' + (totalRevenue/1000).toFixed(1) + 'K', trend: revTrend, sub: invoices.length + ' invoices', cls:'green' },
+            { ico:'✅', lbl:'Collected',      val:'$' + (totalCollected/1000).toFixed(1) + 'K', trend:'', sub: payments.length + ' payments', cls:'blue' },
+            { ico:'📄', lbl:'Open Quotes',    val: openQuotes, trend:'', sub:'$' + (quoteValue/1000).toFixed(1) + 'K pipeline', cls:'purple' },
+            { ico:'🎯', lbl:'Active Leads',   val: activeLeads, trend:'', sub:'$' + (pipelineValue/1000).toFixed(1) + 'K value', cls:'gold' },
+            { ico:'📦', lbl:'Packing Orders', val: activePackOrders, trend:'', sub: completePackOrders + ' ready · ' + urgentPackOrders + ' urgent', cls:'teal' },
+            { ico:'👥', lbl:'Clients',        val: clients.length, trend:'', sub: suppliers.length + ' suppliers', cls:'blue' },
+            { ico:'📊', lbl:'Inventory',      val:'$' + (inventoryValue/1000).toFixed(1) + 'K', trend:'', sub: stockAlerts > 0 ? '⚠️ ' + stockAlerts + ' alerts' : '✅ all healthy', cls: stockAlerts > 0 ? 'red alert-state' : 'green' }
+        ];
+
+        document.getElementById('kpiStrip').innerHTML = kpis.map(k => `
+            <div class="kpi-card ${k.cls}">
+                <span class="kpi-icon">${k.ico}</span>
+                <span class="kpi-lbl">${k.lbl}</span>
+                <span class="kpi-val">${k.val}${k.trend || ''}</span>
+                <span class="kpi-sub">${k.sub}</span>
+            </div>
+        `).join('');
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // BOOT
+    // ═══════════════════════════════════════════════════════════════
+    function boot() {
+        renderModules();
+        loadKpis();
+        updateClock();
+        computeOverlap();
+
+        // Inject shared UI (user chip, sign-out, activity ticker) above modules
+        GFI.injectHeaderUI({
+            tickerInsertBefore: '#modulesRoot'
+        });
+
+        // Log the dashboard open
+        GFI.logActivity({
+            actionType: 'view',
+            module: 'Dashboard',
+            summary: 'Opened Command Center'
+        });
+
+        setInterval(() => {
+            updateClock();
+            computeOverlap();
+        }, 1000);
+        setInterval(loadKpis, 30000);
+    }
+
+    document.addEventListener('DOMContentLoaded', boot);
+    if (document.readyState !== 'loading') boot();
+})();
+</script>
+
+</body>
+</html>

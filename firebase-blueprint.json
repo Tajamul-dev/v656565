@@ -1,0 +1,87 @@
+{
+  "entities": {
+    "PackingOrder": {
+      "title": "PackingOrder",
+      "description": "Container packaging order with material statuses",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "container": { "type": "string" },
+        "customer": { "type": "string" },
+        "item": { "type": "string" },
+        "sku": { "type": "string" },
+        "brand": { "type": "string" },
+        "qty": { "type": "number" },
+        "priority": { "type": "string" },
+        "materials": { "type": "object" },
+        "remarks": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "container", "customer", "item", "sku", "qty"]
+    },
+    "InventoryItem": {
+      "title": "InventoryItem",
+      "description": "Warehouse stock inventory item",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "sku": { "type": "string" },
+        "name": { "type": "string" },
+        "category": { "type": "string" },
+        "materialType": { "type": "string" },
+        "linkedSku": { "type": "string" },
+        "unit": { "type": "string" },
+        "quantity": { "type": "number" },
+        "minLevel": { "type": "number" },
+        "cost": { "type": "number" },
+        "notes": { "type": "string" }
+      },
+      "required": ["id", "name", "quantity"]
+    },
+    "ProformaInvoice": {
+      "title": "ProformaInvoice",
+      "description": "Issued commercial proforma quotation",
+      "type": "object",
+      "properties": {
+        "piNumber": { "type": "string" },
+        "date": { "type": "string" },
+        "buyerName": { "type": "string" },
+        "buyerAddress": { "type": "string" },
+        "totalUSD": { "type": "number" },
+        "totalINR": { "type": "number" }
+      },
+      "required": ["piNumber", "buyerName", "totalUSD"]
+    },
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Authenticated user profile",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string" },
+        "name": { "type": "string" },
+        "role": { "type": "string" },
+        "lastLogin": { "type": "string" }
+      },
+      "required": ["email", "name"]
+    }
+  },
+  "firestore": {
+    "/orders/{orderId}": {
+      "schema": { "$ref": "entities/PackingOrder" },
+      "description": "Active container packaging orders"
+    },
+    "/inventory/{itemId}": {
+      "schema": { "$ref": "entities/InventoryItem" },
+      "description": "Warehouse materials stock inventory"
+    },
+    "/invoices/{invoiceId}": {
+      "schema": { "$ref": "entities/ProformaInvoice" },
+      "description": "Issued proforma invoices"
+    },
+    "/users/{userId}": {
+      "schema": { "$ref": "entities/UserProfile" },
+      "description": "User profile directory"
+    }
+  }
+}

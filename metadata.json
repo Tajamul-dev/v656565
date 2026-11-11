@@ -1,0 +1,6 @@
+{
+  "name": "Global Futura ERP - Enterprise Operations & Costing Suite",
+  "description": "Unified enterprise management suite for edible oils, honey, and commodities featuring Executive Command Center, Packing Tracker, Inventory Control, and OilCost Pro Forward/Reverse Costing & Proforma Invoicing.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

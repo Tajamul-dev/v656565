@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><title>Auth Redirect Test</title></head>
+<body style="font-family:monospace;background:#0f172a;color:#e2e8f0;padding:24px">
+  <h2>Firebase Redirect Sign-In Test</h2>
+  <pre id="out">Loading…</pre>
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+    import {
+      getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult,
+      setPersistence, inMemoryPersistence,
+    } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+
+    const cfg = {
+      apiKey: 'AIzaSyCcem8iCBDDrtXBa8RvLhDn_IJjUI_QrfY',
+      authDomain: 'gen-lang-client-0142280869.firebaseapp.com',
+      projectId: 'gen-lang-client-0142280869',
+      appId: '1:37653767184:web:a08daf054c1faf1753d695',
+    };
+    const app = initializeApp(cfg);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: 'consent select_account' });
+
+    const out = document.getElementById('out');
+    const report = (msg, title) => {
+      out.textContent = msg;
+      if (title) document.title = title.slice(0, 240);
+      fetch('/api/debug-log', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({msg}) }).catch(()=>{});
+    };
+
+    try {
+      const res = await getRedirectResult(auth);
+      if (res && res.user) {
+        report('✅ REDIRECT SIGN-IN SUCCESS — signed in as ' + res.user.email, 'RESULT: SUCCESS ' + res.user.email);
+      } else {
+        report('No pending redirect result. Origin: ' + window.location.origin + '\nAuto-redirecting to Google in 1 second…', 'AUTO REDIRECT ' + window.location.origin);
+        // Auto-start redirect sign-in — no click needed
+        setTimeout(() => {
+          signInWithRedirect(auth, provider).catch(e => {
+            report('❌ signInWithRedirect failed: ' + e.code + ' ' + e.message, 'ERR: ' + e.code);
+          });
+        }, 1000);
+      }
+    } catch (e) {
+      report('❌ getRedirectResult error: ' + e.code + ' — ' + e.message, 'ERR: ' + e.code);
+    }
+  </script>
+</body>
+</html>
